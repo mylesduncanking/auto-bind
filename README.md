@@ -2,7 +2,15 @@
 
 `composer require mylesduncanking/laravel-auto-bind`
 
-# Getting started
+# Usage
+
+In each controller you want to auto-bind properties, add the `#[AutoBind]` attribute to each property.
+```php
+use MylesDuncanKing\AutoBind\Attribute as AutoBindAttr;
+
+#[AutoBindAttr]
+public Client $client;
+```
 
 In your controller's construct method add the call to bind the properties.
 
@@ -13,33 +21,8 @@ public function __construct()
 }
 ```
 
-In each controller you want to auto-bind properties, add the `#[AutoBind]` attribute to each property.
-```php
-...
+Then just ensure that your route file contains the same name as your controller property as normal Laravel route-model binding requires.
 
-use MylesDuncanKing\AutoBind\Attribute as AutoBindAttr;
-
-class ClientsController extends \Illuminate\Routing\Controller
-{
-    #[AutoBindAttr]
-    public Client $client;
-
-    ...
-```
-
-Then just ensure that your route file contains the same name as your controller property.
-```php
-...
-
-Route::post('clients', [ClientsController::class, 'create']);
-Route::get('clients/{client}', [ClientsController::class, 'read']);
-Route::patch('clients/{client}', [ClientsController::class, 'update']);
-Route::delete('clients/{client}', [ClientsController::class, 'delete']);
-
-...
-```
-
-# Usage
 You can then access the auto-bound properties via the class properties.
 ```php
 public function read()
@@ -50,15 +33,74 @@ public function read()
 
 Or add those bound properties directly into your view via the `bound` method.
 ```php
-...
-
-use MylesDuncanKing\AutoBind;
-
-...
-
 public function read()
 {
     $foo = 'bar';
     return view('clients.read', array_merge(AutoBind::bound(), compact(['foo'])));
+}
+```
+
+# Full example
+### Route file: app/routes/web.php
+```php
+<?php
+
+Route::post('clients', [ClientsController::class, 'create']);
+Route::get('clients/{client}/{tab?}', [ClientsController::class, 'read']);
+Route::patch('clients/{client}', [ClientsController::class, 'update']);
+Route::delete('clients/{client}', [ClientsController::class, 'delete']);
+```
+
+### Controller file: app/Http/Controllers/ClientsController.php
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Client;
+use MylesDuncanKing\AutoBind\AutoBind;
+use MylesDuncanKing\AutoBind\Attribute as AutoBind;
+
+class ClientsController extends \Illuminate\Routing\Controller
+{
+    #[AutoBind]
+    public Client $client;
+
+    public function __construct()
+    {
+        AutoBind::bind($this);
+    }
+
+    public function create()
+    {
+        request()->validate(['name' => ['required', 'string', 'max:40']]);
+
+        $client = new Client();
+        $client->name = request('name');
+        $client->save();
+
+        return redirect()->route('client.read', $this->client);
+    }
+
+    public function read($tab = 'index')
+    {
+        return view('clients.read', AutoBind::bound($this, compact(['tab'])));
+    }
+
+    public function update()
+    {
+        request()->validate(['name' => ['required', 'string', 'max:40']]);
+
+        $this->client->name = request('name');
+        $this->client->save();
+
+        return redirect()->back();
+    }
+
+    public function delete()
+    {
+        $this->client->delete();
+        return redirect()->route('clients');
+    }
 }
 ```

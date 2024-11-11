@@ -33,15 +33,14 @@ class AutoBind
         }
     }
 
-    public static function bound($class): array
+    public static function bound($class, $data = []): array
     {
-        $boundParameters = [];
         foreach (get_object_vars($class) as $key => $value) {
             if (in_array($key, self::$ignoreAutoBindProperties) || isset($data[$key])) {
                 continue;
             }
-            $boundParameters[$key] = $value;
+            $data[$key] = $value;
         }
-        return $boundParameters;
+        return $data;
     }
 }
