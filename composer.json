@@ -1,0 +1,25 @@
+{
+    "name": "mylesduncanking/laravel-auto-bind",
+    "description": "Abililty to automatically bind properties in Laravel",
+    "keywords": [
+        "laravel",
+        "route model binding"
+    ],
+    "homepage": "https://github.com/mylesduncanking",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Myles Duncan-King",
+            "email": "mdkwd@hotmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : "^8.0|^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "MylesDuncanKing\\AutoBind\\": "src"
+        }
+    }
+}
