@@ -5,12 +5,15 @@
 # Usage
 
 In each controller you want to auto-bind properties, add the `#[AutoBind]` attribute to each property.
+
 ```php
 use MylesDuncanKing\AutoBind\Attribute as AutoBindAttr;
 
 #[AutoBindAttr]
 public Client $client;
 ```
+
+**Note:** You can specify an alternative to the ID column being used by default by defining a column value. (`#[AutoBindAttr(column: 'your_alternative_column')] `)
 
 In your controller's construct method add the call to bind the properties.
 
