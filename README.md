@@ -48,10 +48,11 @@ public function read()
 ```php
 <?php
 
-Route::post('clients', [ClientsController::class, 'create']);
-Route::get('clients/{client}/{tab?}', [ClientsController::class, 'read']);
-Route::patch('clients/{client}', [ClientsController::class, 'update']);
-Route::delete('clients/{client}', [ClientsController::class, 'delete']);
+Route::get('clients', [ClientsController::class, 'index'])->name('clients');
+Route::post('clients', [ClientsController::class, 'create'])->name('client.create');
+Route::get('clients/{client}/{tab?}', [ClientsController::class, 'read'])->name('client.read');
+Route::patch('clients/{client}', [ClientsController::class, 'update'])->name('client.update');
+Route::delete('clients/{client}', [ClientsController::class, 'delete'])->name('client.delete');
 ```
 
 ### Controller file: app/Http/Controllers/ClientsController.php
