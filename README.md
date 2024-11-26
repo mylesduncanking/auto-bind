@@ -7,13 +7,13 @@
 In each controller you want to auto-bind properties, add the `#[AutoBind]` attribute to each property.
 
 ```php
-use MylesDuncanKing\AutoBind\Attribute as AutoBindAttr;
+use MylesDuncanKing\AutoBind\AutoBindProperty;
 
-#[AutoBindAttr]
+#[AutoBindProperty]
 public Client $client;
 ```
 
-**Note:** You can specify an alternative to the ID column being used by default by defining a column value. (`#[AutoBindAttr(column: 'your_alternative_column')] `)
+**Note:** You can specify an alternative to the ID column being used by default by defining a column value. (`#[AutoBindProperty(column: 'your_alternative_column')] `)
 
 In your controller's construct method add the call to bind the properties.
 
@@ -63,7 +63,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use MylesDuncanKing\AutoBind\AutoBind;
-use MylesDuncanKing\AutoBind\Attribute as AutoBind;
+use MylesDuncanKing\AutoBind\AutoBindProperty as AutoBind;
 
 class ClientsController extends \Illuminate\Routing\Controller
 {

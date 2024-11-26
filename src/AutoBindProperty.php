@@ -3,7 +3,7 @@
 namespace MylesDuncanKing\AutoBind;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-class Attribute
+class AutoBindProperty
 {
     /**
      * Specify the column to use for model binding.

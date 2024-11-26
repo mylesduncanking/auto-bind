@@ -5,7 +5,7 @@ namespace MylesDuncanKing\AutoBind;
 /**
  * Handles automatic model binding for controller properties using attributes.
  *
- * The `AutoBind` class inspects public properties of a class for the `AutoBind` attribute
+ * The `AutoBind` class inspects public properties of a class for the `AutoBindProperty` attribute
  * and binds them to models based on route parameters. It also allows for ignored properties
  * and supports custom columns for model lookup.
  */
@@ -17,7 +17,7 @@ class AutoBind
     /**
      * Automatically binds public properties of a class to their corresponding models.
      *
-     * Inspects the public properties of the given class, checks for the `AutoBind` attribute,
+     * Inspects the public properties of the given class, checks for the `AutoBindProperty` attribute,
      * and uses the specified column (or defaults to 'id') to query and bind the associated model.
      * Also removes the bound parameter from the route after binding.
      *
@@ -37,11 +37,11 @@ class AutoBind
             // Clear the matched properties for the given class before adding new ones
             self::$matchedProperties[get_class($class)] = [];
 
-            // Check if the property has the AutoBind attribute
-            $bindData = $property->getAttributes(Attribute::class);
+            // Check if the property has the AutoBindProperty attribute
+            $bindData = $property->getAttributes(AutoBindProperty::class);
 
             if (
-                /* No AutoBind attribute  */ count($bindData) === 0
+                /* No attribute           */ count($bindData) === 0
                 /* No type hint defined   */ || ! $type
                 /* Not bound in the route */ || request()->route($name) === null
                 /* Not a valid class      */ || !class_exists($type)
