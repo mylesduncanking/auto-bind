@@ -30,12 +30,12 @@ class AutoBind
         $reflection = new \ReflectionClass($class);
         $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
 
+        // Clear the matched properties for the given class before adding new ones
+        self::$matchedProperties[get_class($class)] = [];
+
         foreach ($properties as $property) {
             $name = $property->getName();
             $type = $property->getType()?->getName() ?? null;
-
-            // Clear the matched properties for the given class before adding new ones
-            self::$matchedProperties[get_class($class)] = [];
 
             // Check if the property has the AutoBindProperty attribute
             $bindData = $property->getAttributes(AutoBindProperty::class);
